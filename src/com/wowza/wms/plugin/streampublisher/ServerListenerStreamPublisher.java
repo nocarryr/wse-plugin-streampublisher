@@ -518,6 +518,17 @@ public class ServerListenerStreamPublisher implements IServerNotify2
 							stream.setStartLiveOnPreviousBufferTime(startLiveOnPreviousBufferTime);
 							stream.setTimeOffsetBetweenItems(timeOffsetBetweenItems);
 							ScheduledItem schedule = new ScheduledItem(appInstance, startTime, playlist, stream);
+
+							Date now = new Date();
+							if (startTime.before(now)) {
+								// Prevent scheduling items in the past
+								logger.info(CLASS_NAME + "Scheduled time is in the past for playlist: " + e.getAttribute("name") + " : " + streamName);
+								schedule.stop();
+								continue;
+							} else {
+								schedules.add(schedule);
+							}
+
 							schedules.add(schedule);
 							logger.info(CLASS_NAME + " Scheduled: " + stream.getName() + " for: " + scheduled);
 						}
