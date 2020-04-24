@@ -24,7 +24,7 @@ import com.wowza.wms.stream.publish.Stream;
 
 public class ModuleLoopUntilLive extends ModuleBase
 {
-	
+
 	private class StreamListener implements IMediaStreamActionNotify
 	{
 		public void onPublish(IMediaStream stream, final String streamName, boolean isRecord, boolean isAppend)
@@ -89,7 +89,7 @@ public class ModuleLoopUntilLive extends ModuleBase
 		{
 		}
 	}
-	
+
 	private class MediaCasterListener implements IMediaCasterNotify2
 	{
 
@@ -166,9 +166,9 @@ public class ModuleLoopUntilLive extends ModuleBase
 
 	public static String MODULE_NAME = "ModuleLoopUntilLive";
 	public static final String PROP_NAME_PREFIX = "loopUntilLive";
-	
+
 	private WMSLogger logger;
-	
+
 	private IApplicationInstance appInstance;
 	private String liveStreamNames ="myStream";
 	private String outStreamNames = "Stream1";
@@ -182,14 +182,14 @@ public class ModuleLoopUntilLive extends ModuleBase
 
 	private Map<String, List<PlaylistItem>> playlists = new HashMap<String, List<PlaylistItem>>();
 	private Map<String, Integer> playlistIndexes = new HashMap<String, Integer>();
-	
+
 	public void onAppStart(IApplicationInstance appInstance) {
 		logger = WMSLoggerFactory.getLoggerObj(appInstance);
-		
+
 		init(appInstance);
 		logger.info(MODULE_NAME + ".onAppStart: ["+appInstance.getContextStr()+"]: Build #5", WMSLoggerIDs.CAT_application, WMSLoggerIDs.EVT_comment);
 	}
-	
+
 	public void init(IApplicationInstance appInstance)
 	{
 		this.appInstance = appInstance;
@@ -234,7 +234,7 @@ public class ModuleLoopUntilLive extends ModuleBase
 				{
 					if(!waitForLiveAudio || !waitForLiveVideo)
 						break;
-					
+
 					AMFPacket lastKeyFrame = liveStream.getLastKeyFrame();
 					if(lastKeyFrame != null)
 					{
@@ -259,7 +259,7 @@ public class ModuleLoopUntilLive extends ModuleBase
 					break;
 				}
 			}
-			
+
 			try
 			{
 				Thread.sleep(50);
@@ -268,11 +268,11 @@ public class ModuleLoopUntilLive extends ModuleBase
 			{
 			}
 		}
-		
+
 		// check to see if the live stream is still published.
 		if(appInstance.getStreams().getStream(streamName) == null)
 			return;
-		
+
 		String[] liveNames = liveStreamNames.split(",");
 		String[] outNames = outStreamNames.split(",");
 		int idx = 0;
@@ -307,13 +307,13 @@ public class ModuleLoopUntilLive extends ModuleBase
 			idx++;
 		}
 	}
-	
+
 	private void swapToPlaylist(String streamName)
 	{
 		String[] liveNames = liveStreamNames.split(",");
 		String[] outNames = outStreamNames.split(",");
 		int idx = 0;
-		
+
 		while (idx < liveNames.length)
 		{
 			String liveName = liveNames[idx].trim();

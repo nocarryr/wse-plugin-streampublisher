@@ -23,14 +23,14 @@ public class HttpProviderStreamPublisherControl extends HTTProvider2Base
 			return;
 
 		Server server = Server.getInstance();
-		
+
 		ServerListenerStreamPublisher streamPublisher = (ServerListenerStreamPublisher)server.getProperties().getProperty(ServerListenerStreamPublisher.PROP_STREAMPUBLISHER);
 		if(streamPublisher == null)
 		{
 			streamPublisher = new ServerListenerStreamPublisher();
 			server.getProperties().setProperty(ServerListenerStreamPublisher.PROP_STREAMPUBLISHER, streamPublisher);
 		}
-			
+
 		String queryStr = req.getQueryString();
 		if (queryStr == null)
 		{
@@ -51,37 +51,37 @@ public class HttpProviderStreamPublisherControl extends HTTProvider2Base
 			appInstName = appNameParts.length > 1 ? appNameParts[1] : IApplicationInstance.DEFAULT_APPINSTANCE_NAME;
 		}
 		String action = "reloadSchedule";
-		
+
 		if(queryMap.containsKey("appName"))
 		{
 			appName = queryMap.get("appName");
 			appInstName = IApplicationInstance.DEFAULT_APPINSTANCE_NAME;
 		}
-		
+
 		if(StringUtils.isEmpty(appName))
 		{
 			WMSLoggerFactory.getLogger(HTTPProviderMediaList.class).warn("HttpProviderStreamPublisherControl.onHTTPRequest: appName is missing");
 			resp.setResponseCode(400);
 			return;
 		}
-		
+
 		if(queryMap.containsKey("appInstName"))
 		{
 			appInstName = queryMap.get("appInstName");
 		}
-		
+
 		appContext = appName + "/" + appInstName;
-		
+
 		if(queryMap.containsKey("action"))
 		{
 			action = queryMap.get("action");
 		}
-		
+
 		boolean appInstanceAlreadyRunning = false;
 		IApplication application = null;
 		IApplicationInstance appInstance = null;
 		String ret = "";
-		
+
 		if(vhost.applicationExists(appName))
 		{
 			application = vhost.getApplication(appName);
@@ -92,12 +92,12 @@ public class HttpProviderStreamPublisherControl extends HTTProvider2Base
 			resp.setResponseCode(404);
 			return;
 		}
-		
+
 		if(application.isAppInstanceLoaded(appInstName))
 		{
 			appInstanceAlreadyRunning = true;
 		}
-		
+
 		boolean canLoadSchedule = false;
 		while(true)
 		{
@@ -130,7 +130,7 @@ public class HttpProviderStreamPublisherControl extends HTTProvider2Base
 			}
 			break;
 		}
-		
+
 		if(action.equalsIgnoreCase("unLoadSchedule"))
 		{
 			if(appInstanceAlreadyRunning)
@@ -154,7 +154,7 @@ public class HttpProviderStreamPublisherControl extends HTTProvider2Base
 				}
 				appInstance.getProperties().remove(ServerListenerStreamPublisher.PROP_NAME_PREFIX + "ScheduleLoaded");
 				ret = "schedule unloaded";
-				// AppInstances will stay loaded until there is at least 1 valid connection. 
+				// AppInstances will stay loaded until there is at least 1 valid connection.
 				// Increment the connection count to allow the appInstnace to shut down if there are no other connection attempts.
 				if(appInstance.getClientCountTotal() <= 0)
 				{
@@ -177,10 +177,10 @@ public class HttpProviderStreamPublisherControl extends HTTProvider2Base
 				resp.setResponseCode(404);
 				return;
 			}
-			
+
 			if(!appInstanceAlreadyRunning)
 				scheduleLoaded = appInstance.getProperties().getPropertyBoolean(ServerListenerStreamPublisher.PROP_NAME_PREFIX + "ScheduleLoaded", false);
-		
+
 			if(!scheduleLoaded)
 			{
 				try
@@ -201,7 +201,7 @@ public class HttpProviderStreamPublisherControl extends HTTProvider2Base
 		}
 		else if(StringUtils.isEmpty(ret))
 			ret = "unreconised action";
-		
+
 		String retStr = "<html><head><title>" + action + "</title></head><body>" + appContext + " : " + action +" : "+ ret + "</body></html>";
 
 		try

@@ -136,7 +136,7 @@ public class ServerListenerStreamPublisher implements IServerNotify2
 				return 0;
 			return this.start.before(otherSchedule.start) ? -1 : 1;
 		}
-		
+
 	}
 
 	private class StreamListener implements IStreamActionNotify
@@ -162,18 +162,18 @@ public class ServerListenerStreamPublisher implements IServerNotify2
 				{
 					Publisher publisher = stream.getPublisher();
 					AMFDataList amfList = new AMFDataList();
-	
+
 					amfList.add(new AMFDataItem("@setDataFrame"));
 					amfList.add(new AMFDataItem("onMetaData"));
-	
+
 					AMFDataMixedArray metaData = new AMFDataMixedArray();
 					metaData.put("title", name);
-	
+
 					amfList.add(metaData);
-					
+
 					byte[] dataData = amfList.serialize();
 		            long timecode = Math.max(publisher.getStream().getAudioTC(), publisher.getStream().getVideoTC());
-					
+
 		            publisher.addDataData(dataData, timecode);
 				}
 				if (stream.isSwitchLog())
@@ -349,7 +349,7 @@ public class ServerListenerStreamPublisher implements IServerNotify2
 			timeOffsetBetweenItems = props.getPropertyInt(PROP_NAME_PREFIX + "TimeOffsetBetweenItems", timeOffsetBetweenItems);
 			boolean updateMetadata = serverProps.getPropertyBoolean(PROP_NAME_PREFIX + "UpdateMetadataOnNewItem", true);
 			updateMetadata = props.getPropertyBoolean(PROP_NAME_PREFIX + "UpdateMetadataOnNewItem", updateMetadata);
-			
+
 			String storageDir = appInstance.getStreamStorageDir();
 			try
 			{
@@ -449,7 +449,7 @@ public class ServerListenerStreamPublisher implements IServerNotify2
 				NodeList playList = document.getElementsByTagName("playlist");
 				if (playList.getLength() == 0)
 					return "No playlists defined in smil file";
-				
+
 				synchronized(lock)
 				{
 					for (int i = 0; i < playList.getLength(); i++)
@@ -521,7 +521,7 @@ public class ServerListenerStreamPublisher implements IServerNotify2
 							schedules.add(schedule);
 							logger.info(CLASS_NAME + " Scheduled: " + stream.getName() + " for: " + scheduled);
 						}
-						
+
 					}
 					for(List<ScheduledItem> schedules : schedulesMap.values())
 					{

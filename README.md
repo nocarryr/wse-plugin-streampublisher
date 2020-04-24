@@ -24,7 +24,7 @@ You can use the **HttpProviderStreamPublisherControl** HttpProvider to load and 
 A request to the HttpProvider with no parameters will reload the schedule on the default application defined by the *streamPublisherApplication* server property. The following query parameters can be used.
 **appName** - The name of the application to load schedule on.
 **appInstName** - The name of the appInstance to load the schedule on.
-**action** - *loadSchedule*, *reloadSchedule* or *unloadSchedule*. 
+**action** - *loadSchedule*, *reloadSchedule* or *unloadSchedule*.
 
 If the **action** is *reloadSchedule* or *loadSchedule*, and the appInstance is already running with a schedule then this will be reloaded otherwise the appInstance will be started with a new schedule, **only** if the **action** is *loadSchedule*.
 If the **action** is *unloadSchedule*, then the schedule will be unloaded and *loadSchedule* will be required to load it again later.

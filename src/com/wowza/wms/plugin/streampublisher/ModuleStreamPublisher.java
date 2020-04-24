@@ -21,13 +21,13 @@ public class ModuleStreamPublisher extends ModuleBase
 {
 	public static final String MODULE_NAME = "ModuleStreamPublisher";
 	public static final String PROP_NAME_PREFIX = "streamPublisher";
-	
+
 	private ServerListenerStreamPublisher streamPublisher;
 	private IApplicationInstance appInstance;
 	private WMSLogger logger;
-	
+
 	/**
-	 * 
+	 *
 	 * Flash client loadSchedule method.
 	 */
 	public void loadSchedule(IClient client, RequestFunction function, AMFDataList params)
@@ -43,7 +43,7 @@ public class ModuleStreamPublisher extends ModuleBase
 	}
 
 	/**
-	 * 
+	 *
 	 * Get the StreamPublisher and save it as a Server property if it doesn't already exist then load schedule.
 	 */
 	public void onAppStart(IApplicationInstance appInstance)
@@ -51,7 +51,7 @@ public class ModuleStreamPublisher extends ModuleBase
 		this.appInstance = appInstance;
 		this.logger = WMSLoggerFactory.getLoggerObj(appInstance);
 		logger.info(MODULE_NAME + ".onAppStart: ["+appInstance.getContextStr()+"]: Build #6", WMSLoggerIDs.CAT_application, WMSLoggerIDs.EVT_comment);
-		
+
 		streamPublisher = (ServerListenerStreamPublisher)Server.getInstance().getProperties().get(ServerListenerStreamPublisher.PROP_STREAMPUBLISHER);
 		if(streamPublisher == null)
 		{
@@ -60,7 +60,7 @@ public class ModuleStreamPublisher extends ModuleBase
 		}
 		try
 		{
-			String ret = loadSchedule();			
+			String ret = loadSchedule();
 			logger.info(MODULE_NAME + ".onAppStart: ["+appInstance.getContextStr()+"]: "+ret, WMSLoggerIDs.CAT_application, WMSLoggerIDs.EVT_comment);
 		}
 		catch (Exception e)
@@ -70,7 +70,7 @@ public class ModuleStreamPublisher extends ModuleBase
 	}
 
 	/**
-	 * 
+	 *
 	 * Stop streams and remove local reference to streamPublisher.
 	 */
 	public void onAppStop(IApplicationInstance appInstance)
@@ -78,16 +78,16 @@ public class ModuleStreamPublisher extends ModuleBase
 		unloadSchedule();
 		streamPublisher = null;
 	}
-	
+
 	/**
 	 * public loadSchedule method.  Can be called from JMX.
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public String loadSchedule() throws Exception
 	{
 		return streamPublisher.loadSchedule(appInstance);
 	}
-	
+
 	/**
 	 * public unloadSchedule method.  Can be called from JMX.
 	 */
