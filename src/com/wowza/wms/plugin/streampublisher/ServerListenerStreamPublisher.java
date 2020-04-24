@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.TimeZone;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -486,8 +487,22 @@ public class ServerListenerStreamPublisher implements IServerNotify2
 									playlist.addItem(src, start, length);
 								}
 							}
-							String scheduled = e.getAttribute("scheduled");
+
+							String tzName = e.getAttribute("timezone");
+							TimeZone tz = null;
+							if (tzName.length() < 0) {
+								try {
+									tz = TimeZone.getTimeZone(tzName);
+								} catch (Exception z) {
+									throw new Exception(CLASS_NAME + " Parsing timezone failed.", z);
+								}
+							}
 							SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+							if (tz != null) {
+								parser.setTimeZone(tz);
+							}
+							String scheduled = e.getAttribute("scheduled");
+
 							Date startTime = null;
 							try
 							{
