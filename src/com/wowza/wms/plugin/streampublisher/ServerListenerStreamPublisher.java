@@ -490,7 +490,7 @@ public class ServerListenerStreamPublisher implements IServerNotify2
 
 							String tzName = e.getAttribute("timezone");
 							TimeZone tz = null;
-							if (tzName.length() < 0) {
+							if (tzName.length() > 0) {
 								try {
 									tz = TimeZone.getTimeZone(tzName);
 								} catch (Exception z) {
