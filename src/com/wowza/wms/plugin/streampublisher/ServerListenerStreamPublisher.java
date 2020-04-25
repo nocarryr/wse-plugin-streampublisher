@@ -525,8 +525,6 @@ public class ServerListenerStreamPublisher implements IServerNotify2
 								logger.info(CLASS_NAME + "Scheduled time is in the past for playlist: " + e.getAttribute("name") + " : " + streamName);
 								schedule.stop();
 								continue;
-							} else {
-								schedules.add(schedule);
 							}
 
 							schedules.add(schedule);
