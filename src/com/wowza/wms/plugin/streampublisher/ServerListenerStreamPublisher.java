@@ -340,6 +340,8 @@ public class ServerListenerStreamPublisher implements IServerNotify2
 			// see if a schedule file is specified in the target application
 			String scheduleSmil = serverProps.getPropertyStr(PROP_NAME_PREFIX + "SmilFile", "streamschedule.smil");
 			scheduleSmil = props.getPropertyStr(PROP_NAME_PREFIX + "SmilFile", scheduleSmil);
+			String defaultTimezoneName = serverProps.getPropertyStr(PROP_NAME_PREFIX + "TimezoneName", "");
+			defaultTimezoneName = props.getPropertyStr(PROP_NAME_PREFIX + "TimezoneName", defaultTimezoneName);
 			boolean timesInMilliseconds = serverProps.getPropertyBoolean(PROP_NAME_PREFIX + "TimesInMilliSeconds", false);
 			timesInMilliseconds = props.getPropertyBoolean(PROP_NAME_PREFIX + "TimesInMilliSeconds", timesInMilliseconds);
 			boolean startLiveOnPreviousKeyFrame = serverProps.getPropertyBoolean(PROP_NAME_PREFIX + "StartLiveOnPreviousKeyFrame", true);
@@ -350,6 +352,8 @@ public class ServerListenerStreamPublisher implements IServerNotify2
 			timeOffsetBetweenItems = props.getPropertyInt(PROP_NAME_PREFIX + "TimeOffsetBetweenItems", timeOffsetBetweenItems);
 			boolean updateMetadata = serverProps.getPropertyBoolean(PROP_NAME_PREFIX + "UpdateMetadataOnNewItem", true);
 			updateMetadata = props.getPropertyBoolean(PROP_NAME_PREFIX + "UpdateMetadataOnNewItem", updateMetadata);
+			boolean playPrevious = serverProps.getPropertyBoolean(PROP_NAME_PREFIX + "PlayPreviousSchedules", true);
+			playPrevious = props.getPropertyBoolean(PROP_NAME_PREFIX + "PlayPreviousSchedules", playPrevious);
 
 			String storageDir = appInstance.getStreamStorageDir();
 			try
@@ -490,6 +494,10 @@ public class ServerListenerStreamPublisher implements IServerNotify2
 
 							String tzName = e.getAttribute("timezone");
 							TimeZone tz = null;
+							if (tzName.length() == 0) {
+								logger.info(CLASS_NAME + " using defaultTimezoneName: '" + defaultTimezoneName + "'");
+								tzName = defaultTimezoneName;
+							}
 							if (tzName.length() > 0) {
 								try {
 									tz = TimeZone.getTimeZone(tzName);
@@ -535,7 +543,7 @@ public class ServerListenerStreamPublisher implements IServerNotify2
 							ScheduledItem schedule = new ScheduledItem(appInstance, startTime, playlist, stream);
 
 							Date now = new Date();
-							if (startTime.before(now)) {
+							if (playPrevious == false && startTime.before(now)) {
 								// Prevent scheduling items in the past
 								logger.info(CLASS_NAME + "Scheduled time is in the past for playlist: " + e.getAttribute("name") + " : " + streamName);
 								schedule.stop();
